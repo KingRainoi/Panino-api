@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  mariadb:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: B04s10aB71#
+      MYSQL_DATABASE: paninodb
+      MYSQL_USER: admin
+    volumes:
+      - ./data:/var/lib/mysql  # Mount mariadb_data volume to ./data directory
+      - ./backups:/var/lib/mysql-backup  # Mount backup_volume to ./backups directory
+    ports:
+      - "3307:3306"
+
+volumes:
+  mariadb_data: {}
+  # No need to define volumes here as they are mounted from host directories
+
+
