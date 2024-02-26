@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { IngredientsModule } from './ingredients/ingredients.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModule } from './product/product.module';
-import { ClientResolver } from './client/client.resolver';
 import { ClientModule } from './client/client.module';
 
 @Module({
@@ -24,6 +23,6 @@ import { ClientModule } from './client/client.module';
     ClientModule
   ],
   controllers: [],
-  providers: [ClientResolver],
+  providers: [],
 })
 export class AppModule {}
