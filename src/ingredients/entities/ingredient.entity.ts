@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, ManyToMany } from 'typeorm';
-//const { Entity, Column, PrimaryGeneratedColumn } = require('typeorm');
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, DeleteDateColumn } from 'typeorm';
+import { Product } from '../../product/entities/product.entity';
 
 @Entity()
 export class Ingredient {
@@ -20,6 +20,9 @@ export class Ingredient {
 
     @Column()
     stock: number;
+
+    @ManyToMany(type => Product, product => product.ingredients)
+    products: Product[];
 
     @DeleteDateColumn()
     deletedAt: Date;

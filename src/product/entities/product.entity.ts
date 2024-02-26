@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, DeleteDateColumn, ManyToMany} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn, ManyToMany, JoinTable} from 'typeorm';
 import { Ingredient } from '../../ingredients/entities/ingredient.entity';
 
 @Entity()
@@ -21,8 +21,8 @@ export class Product{
     @Column('text')
     image: string;
 
-    @ManyToMany(type => Ingredient)
-    @JoinColumn() 
+    @ManyToMany(type => Ingredient, ingredient => ingredient.products)
+    @JoinTable()
     ingredients: Ingredient[];
 
     @DeleteDateColumn()
