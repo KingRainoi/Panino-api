@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -40,7 +40,22 @@ export class ProductService {
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+    const product = await this.productRepository.findOne({ 
+      where: { id: id },
+      relations: ['ingredients'] 
+    });
+
+    if (!product) {
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+
+    if (updateProductDto.ingredientNames) {
+        product.ingredients = await this.ingredientRepository.find({
+            where: updateProductDto.ingredientNames.map(name => ({ name })),
+        });
+    }
+
+    return this.productRepository.save(product);
   }
 
   async remove(id: number) {
