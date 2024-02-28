@@ -36,19 +36,40 @@ export class ProductService {
   }
 
   async findOne(id: number) {
-    return `This action returns a #${id} product`;
+    try {
+      const product = await this.productRepository.findOneBy({id});
+      return product;
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      throw new Error('Error fetching product');
+    }
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
     const product = await this.productRepository.findOne({ 
-      where: { id: id },
-      relations: ['ingredients'] 
+      where: { id: id }
     });
 
     if (!product) {
       throw new NotFoundException(`Product with ID ${id} not found`);
     }
 
+    // Update other fields of the product
+    if (updateProductDto.name !== undefined) {
+      product.name = updateProductDto.name;
+    }
+    if (updateProductDto.description !== undefined) {
+        product.description = updateProductDto.description;
+    }
+    if (updateProductDto.price !== undefined) {
+        product.price = updateProductDto.price;
+    }
+    if (updateProductDto.stock !== undefined) {
+        product.stock = updateProductDto.stock;
+    }
+    if (updateProductDto.image !== undefined) {
+        product.image = updateProductDto.image;
+    }
     if (updateProductDto.ingredientNames) {
         product.ingredients = await this.ingredientRepository.find({
             where: updateProductDto.ingredientNames.map(name => ({ name })),
@@ -59,6 +80,6 @@ export class ProductService {
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} product`;
+    return await this.productRepository.softDelete({id});
   }
 }

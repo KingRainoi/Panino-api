@@ -4,6 +4,7 @@
 /build
 data
 backups
+panino-api
 
 # Logs
 logs
