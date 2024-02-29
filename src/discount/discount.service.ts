@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateDiscountDto } from './dto/create-discount.dto';
 import { UpdateDiscountDto } from './dto/update-discount.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -42,14 +42,13 @@ export class DiscountService {
     return await this.discountRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} discount`;
+  async findOne(id: number) {
+    return await this.discountRepository.findOneBy({id});
   }
 
   async update(id: number, updateDiscountDto: UpdateDiscountDto) {
     try {const discount = await this.discountRepository.findOne({
-      where: { id: id },
-      relations: ['products']
+      where: { id: id }
     })
 
     if(!discount) {
