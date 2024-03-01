@@ -5,6 +5,7 @@ import { Discount } from '../../discount//entities//discount.entity';
 
 @Entity()
 export class Order {
+    
     @PrimaryGeneratedColumn()
     id: number;
 

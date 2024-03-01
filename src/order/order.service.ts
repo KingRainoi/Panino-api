@@ -10,10 +10,14 @@ export class OrderService {
 
   constructor(
     @InjectRepository(Order)
-    private readonly orderRepository: Repository<Order>
+    private readonly orderRepository: Repository<Order>,
+
   ) {}
 
   create(createOrderDto: CreateOrderDto) {
+    const order = new Order();
+    
+
     return 'This action adds a new order';
   }
 

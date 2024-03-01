@@ -12,10 +12,10 @@ export class Client {
     @Column('text')
     details: string;
 
-    @Column({ length: 14 })
+    @Column({ length: 25 })
     phone: string;
 
     @OneToMany((type: any) => Order, order => order.client)
     // Inicializa el arreglo vacío
-    orders: Order[] = []; 
+    orders: Order[]; 
 }
