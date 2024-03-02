@@ -27,4 +27,3 @@ export class Ingredient {
     @DeleteDateColumn()
     deletedAt: Date;
 }
-
