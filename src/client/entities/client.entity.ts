@@ -9,6 +9,9 @@ export class Client {
     @Column({ length: 100 })
     name: string;
 
+    @Column({ length: 100 })
+    email: string;
+
     @Column('text')
     details: string;
 
