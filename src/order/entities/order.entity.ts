@@ -16,7 +16,7 @@ export class Order {
     @Column('text')
     details: string;
 
-    @Column('jsonb') // Store product names, quantities, and prices as JSON
+    @Column('json') // Store product names, quantities, and prices as JSON
     products: { name: string; quantity: number; price: number }[];
 
     @ManyToOne(() => Discount, (discount) => discount.orders)

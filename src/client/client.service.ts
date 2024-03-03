@@ -21,11 +21,14 @@ export class ClientService {
   }
 
   async findAll() {
-    return await this.clientRepository.find();
+    return await this.clientRepository.find({relations: ['orders']});
   }
 
   async findOne(id: number) {
-    return await this.clientRepository.findBy({id});
+    return await this.clientRepository.findOne({
+      where: {id: id},
+      relations: ['orders']
+    });
   }
 
   async update(id: number, updateClientDto: UpdateClientDto) {
@@ -56,8 +59,7 @@ export class ClientService {
 
     return this.clientRepository.save(client);
   }
-
-
+  
   async remove(id: number) {
     return await this.clientRepository.softDelete({id});
   }

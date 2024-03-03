@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, DeleteDateColumn } from 'typeorm';
 import { Order } from '../../order/entities/order.entity';
 
 @Entity()
@@ -15,7 +15,9 @@ export class Client {
     @Column({ length: 25 })
     phone: string;
 
-    @OneToMany((type: any) => Order, order => order.client)
-    // Inicializa el arreglo vacío
-    orders: Order[]; 
+    @OneToMany(type => Order, order => order.client)
+    orders: Order[];
+
+    @DeleteDateColumn()
+    deletedAt: Date;
 }
