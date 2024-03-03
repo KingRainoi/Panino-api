@@ -32,34 +32,9 @@ export class ClientService {
   }
 
   async update(id: number, updateClientDto: UpdateClientDto) {
-    const client = await this.clientRepository.createQueryBuilder('client')
-        .leftJoinAndSelect('client.orders', 'order')
-        .where('client.id = :id', { id })
-        .getOne();
-
-    const orders = await this.ordersRepository.findByIds(updateClientDto.orderIds);
-
-    if(client === null) {
-      throw new BadRequestException(`Client with id ${id} not found`);
-    }
-
-    client.orders = orders;
-
-    if(updateClientDto.name !== undefined) {
-      client.name = updateClientDto.name;
-    }
-
-    if(updateClientDto.phone !== undefined) {
-      client.phone = updateClientDto.phone;
-    }
-
-    if(updateClientDto.details!== undefined) {
-      client.details = updateClientDto.details;
-    }
-
-    return this.clientRepository.save(client);
+    return this.clientRepository.update({id},updateClientDto);
   }
-  
+
   async remove(id: number) {
     return await this.clientRepository.softDelete({id});
   }
