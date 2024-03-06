@@ -5,6 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Ingredient } from 'src/ingredients/entities/ingredient.entity';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
+import { OdooAuthClient,OdooActionsClient } from '../Integrations/odoo/client.odoo';
+import { odooDb, odooPassword, odooUsername } from '../Integrations/odoo/credentials';
 
 @Injectable()
 export class ProductService {
@@ -22,6 +24,52 @@ export class ProductService {
     product.price = createProductDto.price;
     product.stock = createProductDto.stock;
     product.image = createProductDto.image;
+
+    try {
+      // Authenticate with Odoo
+      OdooAuthClient.methodCall('authenticate', [odooDb, odooUsername, odooPassword, {}], async (error, uid) => {
+        if (error) {
+          console.error('Authentication failed:', error);
+          return;
+        } else {
+          console.log('User authenticated successfully. User ID:', uid);
+          
+          // Check access rights for creating products
+          const hasAccess = await new Promise((resolve, reject) => {
+            OdooActionsClient.methodCall('execute_kw', [odooDb, uid, odooPassword, 'product.product', 'check_access_rights', ['create'], {'raise_exception': false}], (err, value) => {
+              if (err) {
+                console.error('Error checking access rights:', err);
+                reject(err);
+              } else {
+                console.log('Access rights checked successfully:', value);
+                resolve(value);
+              }
+            });
+          });
+          
+          // If user has access rights, create the product
+          if (hasAccess) {
+            OdooActionsClient.methodCall('execute_kw', [odooDb, uid, odooPassword, 'product.product', 'create', [{
+              name: createProductDto.name,
+              type: 'product',
+              list_price: createProductDto.price,
+              default_code: 6433636
+              // Add more fields as needed
+            }]], (err, productId) => {
+              if (err) {
+                console.error('Failed to create product:', err);
+              } else {
+                console.log('Product created successfully. Product ID:', productId);
+              }
+            });
+          } else {
+            console.log('User does not have access rights to create products.');
+          }
+        }
+      });
+    } catch(e) {
+      console.log(e);
+    }
 
     // Find the ingredients by their names
     product.ingredients = await this.ingredientRepository.find({
