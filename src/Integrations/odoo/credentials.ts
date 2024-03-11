@@ -1,5 +1,5 @@
 // Odoo connection details
-export const odooUrl = 'http://10.10.3.156:8069';
+export const odooUrl = 'http://10.10.2.211:8069';
 //export const odooUrl = 'localhost'
 export const odooDb = 'tarea';
 export const odooUsername = 'bezyex@gmail.com';

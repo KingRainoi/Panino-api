@@ -20,7 +20,6 @@ export class ClientService {
 
   async create(createClientDto: CreateClientDto) {
     //Creates client in odoo database
-    
       //Odoo version
       OdooAuthClient.methodCall('version', [], function (error, value) {
         if (error){
@@ -40,9 +39,7 @@ export class ClientService {
           console.log(OdooAuthClient.options.port);
           //get uid
           console.log("this is the user id"+ uid);
-          //
           
-          //
           OdooActionsClient.methodCall('execute_kw', [odooDb, 2, odooPassword, 'res.partner', 'check_access_rights', ['read'], {'raise_exception': false}], (error, value) => {
             if (error) {
                 console.error('Error checking access rights:', error);
