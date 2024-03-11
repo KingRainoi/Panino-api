@@ -20,7 +20,7 @@ export class ClientService {
 
   async create(createClientDto: CreateClientDto) {
     //Creates client in odoo database
-    try {
+    
       //Odoo version
       OdooAuthClient.methodCall('version', [], function (error, value) {
         if (error){
@@ -43,7 +43,7 @@ export class ClientService {
           //
           
           //
-          OdooActionsClient.methodCall('execute_kw', [odooDb, 1, odooPassword, 'res.partner', 'check_access_rights', ['read'], {'raise_exception': false}], (error, value) => {
+          OdooActionsClient.methodCall('execute_kw', [odooDb, 2, odooPassword, 'res.partner', 'check_access_rights', ['read'], {'raise_exception': false}], (error, value) => {
             if (error) {
                 console.error('Error checking access rights:', error);
             } else {
@@ -52,9 +52,8 @@ export class ClientService {
           });
         
           // Call the Odoo create method to create the order
-          OdooActionsClient.methodCall('execute_kw', [odooDb, 1, odooPassword, 'res.partner', 'create', [{
+          OdooActionsClient.methodCall('execute_kw', [odooDb, 2, odooPassword, 'res.partner', 'create', [{
             name: createClientDto.name,
-            customer:true,
             email: createClientDto.email
           }]], (err) => {
             if (err) {
@@ -65,9 +64,7 @@ export class ClientService {
           });
         }
       });
-    } catch (error) {
-      console.error(error);
-    }
+   
 
     //Creates the client in database
     return await this.clientRepository.save(createClientDto);
