@@ -42,7 +42,7 @@ Para instalar la base datos ejecuta
 $ docker compose up
 ```
 
-## Running the app
+## Ejecutar la app
 
 ```bash
 # development
@@ -57,3 +57,12 @@ $ npm run start:prod
 
 ## Setup
 
+1.- Para que la aplicación se ejecute correctamente abra el archivo que se encuentra en la ruta "src/Integrationbs/odoo/credentials.ts", después debe modificar las credenciales ajustandolas a los datos de su instancia de Odoo
+
+2.- La aplicación empieza por default en el puerto 3000, si su aplicación no esta en el puerto 3000 favor de ajustar sus llamadas al api con el puerto respectivo.
+
+## Uso
+Para utilizar la api se adjuntaron ejemplos en el archivo llamado "Panino-api.postman_collection.json"
+
+## Soporte
+Para culalquier duda no dude en crear un issue o poner en contacto con el dueño del repositorio ";)"
