@@ -10,6 +10,7 @@ import { odooDb, odooPassword, odooUsername } from '../Integrations/odoo/credent
 
 @Injectable()
 export class ProductService {
+
   constructor(
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
@@ -34,13 +35,11 @@ export class ProductService {
         } else {
           console.log('User authenticated successfully. User ID:', uid);
           
-          
-          
           // If user has access rights, create the product
           OdooActionsClient.methodCall('execute_kw', [odooDb, uid, odooPassword, 'product.product', 'create', [{
             name: createProductDto.name,
             list_price: createProductDto.price,
-            // Add more fields as needed
+            
           }]], (err, productId) => {
             if (err) {
               console.error('Failed to create product:', err);

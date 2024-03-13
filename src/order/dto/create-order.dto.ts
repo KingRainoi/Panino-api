@@ -1,6 +1,5 @@
 import { Type } from "class-transformer";
-import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsString, Validate, ValidateNested } from "class-validator";
-import { Client } from "../../client/entities/client.entity";
+import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsString, ValidateNested } from "class-validator";
 
 class ProductsInOrder {
     @IsString()
