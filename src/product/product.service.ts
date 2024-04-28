@@ -7,6 +7,8 @@ import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { OdooAuthClient,OdooActionsClient } from '../Integrations/odoo/client.odoo';
 import { odooDb, odooPassword, odooUsername } from '../Integrations/odoo/credentials';
+import { HttpService } from '@nestjs/axios';
+import axios from 'axios';
 
 @Injectable()
 export class ProductService {
@@ -16,9 +18,11 @@ export class ProductService {
     private productRepository: Repository<Product>,
     @InjectRepository(Ingredient)
     private ingredientRepository: Repository<Ingredient>,
+    private readonly httpService: HttpService
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
+    //local product
     const product = new Product();
     product.name = createProductDto.name;
     product.description = createProductDto.description;
@@ -26,6 +30,7 @@ export class ProductService {
     product.stock = createProductDto.stock;
     product.image = createProductDto.image;
 
+    //odoo
     try {
       // Authenticate with Odoo
       OdooAuthClient.methodCall('authenticate', [odooDb, odooUsername, odooPassword, {}], async (error, uid) => {
@@ -45,6 +50,7 @@ export class ProductService {
               console.error('Failed to create product:', err);
             } else {
               console.log('Product created successfully. Product ID:', productId);
+              product.id = productId;
             }
           });
         } 
@@ -59,7 +65,23 @@ export class ProductService {
         where: createProductDto.ingredientNames.map(name => ({ name })),
     });
 
-    return this.productRepository.save(product);
+    const newProduct = this.productRepository.save(product);
+    console.log("This i sthe product ID",(await newProduct).id);
+    const id = (await newProduct).id;
+    //prestashop
+    const url = 'http://localhost:8888/panino/admin383wi1tgqbvtbzvrxnu/create-products.php?secure_key=ed3fa1ce558e1c2528cfbaa3f9940';
+    const data = {
+      "price": product.price,
+      "name":product.name,
+      "status":1,
+      "reference": id.toString()
+    }
+    try {
+      await axios.post(url, data);
+    } catch (e) {
+      console.log('This is the error from prestashop',e);
+    }
+    return newProduct;
   }
 
   async findAll() {
@@ -107,10 +129,40 @@ export class ProductService {
         });
     }
 
+    //Prestashop
+    const url = 'http://localhost:8888/panino/admin383wi1tgqbvtbzvrxnu/update-product.php?secure_key=ed3fa1ce558e1c2528cfbaa3f9940';
+    const ref = id.toString();
+    console.log(ref);
+    const data = {
+      "price": product.price,
+      "reference": ref,
+      "status":1,
+      "quantity":450,
+      "name":product.name
+    }
+    try {
+      await axios.put(url, data);
+    } catch (e) {
+      console.log('This is the error from prestashop',e);
+    }
+
     return this.productRepository.save(product);
   }
 
   async remove(id: number) {
+    const ref = id.toString();
+    const url = 'http://localhost:8888/panino/admin383wi1tgqbvtbzvrxnu/update-product.php?secure_key=ed3fa1ce558e1c2528cfbaa3f9940';
+    const data = {
+      "active":false,
+      "reference": ref
+    }
+    try {
+      await axios.put(url,data);
+    }
+    catch(e) {
+      console.log('This is the error from prestashop', e);
+    }
+    
     return await this.productRepository.softDelete({id});
   }
 }

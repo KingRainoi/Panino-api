@@ -18,6 +18,7 @@ export class ClientService {
     private ordersRepository: Repository<Order>
   ) {}
 
+  
   async create(createClientDto: CreateClientDto) {
     //Creates client in odoo database
       //Odoo version
@@ -57,10 +58,13 @@ export class ClientService {
               console.error('Failed to create order:', err);
             } else {
               console.log('Customer created successfully. Order ID:', 1);
-            }
-          });
-        }
-      });
+          }
+        });
+      }
+    });
+
+    //Prestashop version
+    
    
 
     //Creates the client in database
