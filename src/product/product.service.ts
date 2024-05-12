@@ -74,7 +74,9 @@ export class ProductService {
       "price": product.price,
       "name":product.name,
       "status":1,
-      "reference": id.toString()
+      "reference": id.toString(),
+      "description":product.description,
+      "quantity":product.stock
     }
     try {
       await axios.post(url, data);
@@ -133,13 +135,16 @@ export class ProductService {
     const url = 'http://localhost:8888/panino/admin383wi1tgqbvtbzvrxnu/update-product.php?secure_key=ed3fa1ce558e1c2528cfbaa3f9940';
     const ref = id.toString();
     console.log(ref);
+    console.log(product.name);
     const data = {
       "price": product.price,
       "reference": ref,
-      "status":1,
+      "description":product.description,
       "quantity":450,
-      "name":product.name
+      "name":product.name,
+      "state":1
     }
+    console.log(data);
     try {
       await axios.put(url, data);
     } catch (e) {
@@ -151,10 +156,18 @@ export class ProductService {
 
   async remove(id: number) {
     const ref = id.toString();
+    const product = await this.productRepository.findOne({ 
+      where: { id: id }
+    });
     const url = 'http://localhost:8888/panino/admin383wi1tgqbvtbzvrxnu/update-product.php?secure_key=ed3fa1ce558e1c2528cfbaa3f9940';
+    console.log(ref);
     const data = {
-      "active":false,
-      "reference": ref
+      "price": product?.price,
+      "reference": ref,
+      "description":product?.description,
+      "quantity":product?.stock,
+      "name":product?.name,
+      "state":0
     }
     try {
       await axios.put(url,data);
