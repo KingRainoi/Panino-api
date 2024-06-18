@@ -69,7 +69,7 @@ export class ProductService {
     console.log("This i sthe product ID",(await newProduct).id);
     const id = (await newProduct).id;
     //prestashop
-    const url = 'http://localhost:8888/panino/admin383wi1tgqbvtbzvrxnu/create-products.php?secure_key=ed3fa1ce558e1c2528cfbaa3f9940';
+    const url = 'http://54.224.249.75:8080/admin5251u73ax7jvtm1cpei/create-products.php?secure_key=ed3fa1ce558e1c2528cfbaa3f9940';
     const data = {
       "price": product.price,
       "name":product.name,
@@ -132,7 +132,7 @@ export class ProductService {
     }
 
     //Prestashop
-    const url = 'http://localhost:8888/panino/admin383wi1tgqbvtbzvrxnu/update-product.php?secure_key=ed3fa1ce558e1c2528cfbaa3f9940';
+    const url = 'http://54.224.249.75:8080/admin5251u73ax7jvtm1cpei/update-product.php?secure_key=ed3fa1ce558e1c2528cfbaa3f9940';
     const ref = id.toString();
     console.log(ref);
     console.log(product.name);
@@ -159,7 +159,7 @@ export class ProductService {
     const product = await this.productRepository.findOne({ 
       where: { id: id }
     });
-    const url = 'http://localhost:8888/panino/admin383wi1tgqbvtbzvrxnu/update-product.php?secure_key=ed3fa1ce558e1c2528cfbaa3f9940';
+    const url = 'http://54.224.249.75:8080/admin5251u73ax7jvtm1cpei/update-product.php?secure_key=ed3fa1ce558e1c2528cfbaa3f9940';
     console.log(ref);
     const data = {
       "price": product?.price,

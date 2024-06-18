@@ -16,5 +16,3 @@ services:
 volumes:
   mariadb_data: {}
   # No need to define volumes here as they are mounted from host directories
-
-
